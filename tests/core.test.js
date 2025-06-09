@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, beforeAll, afterAll, afterEach } from "vitest";
-import { calculateDiscount, canDrive, fetchData, getCoupons, isPriceInRange, isValidUsername, Stack, validateUserInput } from "../src/core";
+import { calculateDiscount, canDrive, createProduct, fetchData, getCoupons, isPriceInRange, isStrongPassword, isValidUsername, Stack, validateUserInput } from "../src/core";
 
 describe('getCoupons', () => {
   it('should return an array of coupons', () => {
@@ -209,5 +209,34 @@ describe('Stack', () => {
     stack.clear();
 
     expect(stack.size()).toBe(0);
+  })
+})
+
+describe('createProduct', () => {
+  it('should return true if correct product was added', () => {
+    const product = { name: 'Test', price: 10};
+    expect(createProduct(product).success).toBe(true);
+  });
+  it('should return false and throw an error if no product name was given', () => {
+    const product = {name: '', price: 10}
+    expect(createProduct(product).success).toBe(false);
+    expect(createProduct(product).error.code).toMatch(/invalid/i);
+  })
+  it('should return false and throw an error if incorrect price was given', () => {
+    const product = {name: 'Test', price: -50}
+    expect(createProduct(product).success).toBe(false);
+    expect(createProduct(product).error.code).toMatch(/invalid/i);
+  })
+})
+
+describe('isStrongPassword', () => {
+  it.each([
+    { story: 'is valid', password: 'Password1', result: true },
+    { story: 'is too short', password: 'abc', result: false },
+    { story: 'does not have uppercase letters', password: 'password', result: false },
+    { story: 'does not have lowercase letters', password: 'PASSWORD', result: false },
+    { story: 'does not have at least one digit', password: 'Password', result: false },
+  ])('should return $result if password $story', ({ story, password, result }) => {
+    expect(isStrongPassword(password)).toBe(result);
   })
 })
