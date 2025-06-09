@@ -1,5 +1,14 @@
-import { vi, it, expect, describe, beforeEach } from 'vitest'
-import { getPriceInCurrency, getShippingInfo, login, renderPage, signUp, submitOrder, isOnline, getDiscount } from '../src/mocking';
+import { vi, it, expect, describe, beforeEach } from 'vitest';
+import {
+  getPriceInCurrency,
+  getShippingInfo,
+  login,
+  renderPage,
+  signUp,
+  submitOrder,
+  isOnline,
+  getDiscount,
+} from '../src/mocking';
 import { getExchangeRate } from '../src/libs/currency';
 import { getShippingQuote } from '../src/libs/shipping';
 import { trackPageView } from '../src/libs/analytics';
@@ -17,31 +26,31 @@ vi.mock('../src/libs/email', async (importOriginal) => {
   const originalModule = await importOriginal();
   return {
     ...originalModule,
-    sendEmail: vi.fn()
-  }
-})
+    sendEmail: vi.fn(),
+  };
+});
 
 describe('test suite', () => {
   it('test case', () => {
     const sendText = vi.fn();
     sendText.mockReturnValue('ok');
 
-    const result = sendText('message')
+    const result = sendText('message');
 
-    expect(sendText).toHaveBeenCalledWith('message')
-    expect(result).toBe('ok')
-  })
-})
+    expect(sendText).toHaveBeenCalledWith('message');
+    expect(result).toBe('ok');
+  });
+});
 
 describe('getPriceInCurrency', () => {
   it('should return price in target currency', () => {
     vi.mocked(getExchangeRate).mockReturnValue(1.5);
-    
+
     const price = getPriceInCurrency(10, 'AUD');
 
     expect(price).toBe(15);
-  })
-})
+  });
+});
 
 describe('getShippingInfo', () => {
   it('should return unavailable', () => {
@@ -52,11 +61,11 @@ describe('getShippingInfo', () => {
     expect(result).toMatch(/unavailable/i);
   });
   it('should return shipping info if quote can be fetched', () => {
-    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2});
+    vi.mocked(getShippingQuote).mockReturnValue({ cost: 10, estimatedDays: 2 });
 
     const result = getShippingInfo('London');
 
-    expect(result).toMatch(/shipping cost: \$10 \(2 days\)/i)
+    expect(result).toMatch(/shipping cost: \$10 \(2 days\)/i);
   });
 });
 
@@ -70,12 +79,12 @@ describe('renderPage', () => {
     await renderPage();
 
     expect(trackPageView).toHaveBeenCalledWith('/home');
-  })
+  });
 });
 
 describe('submitOrder', () => {
   const order = { totalAmount: 10 };
-  const creditCard = { creditCardNumber: '1234'};
+  const creditCard = { creditCardNumber: '1234' };
 
   it('should charge the customer', async () => {
     vi.mocked(charge).mockResolvedValue({ status: 'success' });
@@ -85,18 +94,18 @@ describe('submitOrder', () => {
     expect(charge).toHaveBeenCalled(creditCard, order.totalAmount);
   });
   it('should return success when payment is successfull', async () => {
-    vi.mocked(charge).mockResolvedValue({ status: 'success'});
+    vi.mocked(charge).mockResolvedValue({ status: 'success' });
 
     const result = await submitOrder(order, creditCard);
 
-    expect(result).toEqual({ success: true});
+    expect(result).toEqual({ success: true });
   });
   it('should return success when payment is successfull', async () => {
-    vi.mocked(charge).mockResolvedValue({ status: 'failed'});
+    vi.mocked(charge).mockResolvedValue({ status: 'failed' });
 
     const result = await submitOrder(order, creditCard);
 
-    expect(result).toEqual({ success: false, error: 'payment_error'});
+    expect(result).toEqual({ success: false, error: 'payment_error' });
   });
 });
 
@@ -127,13 +136,13 @@ describe('login', () => {
   const email = 'name@domain.com';
   it('should email to one-time login code', async () => {
     const spy = vi.spyOn(security, 'generateCode');
-    
+
     await login(email);
 
     const secretCode = spy.mock.results[0].value.toString();
     expect(sendEmail).toHaveBeenCalledWith(email, secretCode);
-  })
-})
+  });
+});
 
 describe('isOnline', () => {
   it('should return false if current hour is outside of opening hours', () => {

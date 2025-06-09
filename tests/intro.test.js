@@ -1,5 +1,5 @@
-import { describe, test, it, expect } from "vitest";
-import { max, fizzBuzz, calculateAverage, factorial } from "../src/intro";
+import { describe, test, it, expect } from 'vitest';
+import { max, fizzBuzz, calculateAverage, factorial } from '../src/intro';
 
 describe('max', () => {
   it('should return the first argument if it is greater', () => {
@@ -11,7 +11,7 @@ describe('max', () => {
   it('should return the first argument if arguments are equal', () => {
     expect(max(2, 2)).toBe(2);
   });
-})
+});
 
 describe('fizzBuzz', () => {
   it('should return FizzBuzz if the arg is divisible by 3 and 5', () => {
@@ -26,9 +26,9 @@ describe('fizzBuzz', () => {
   it('should return the arg as string if it is not by 3 or 5', () => {
     expect(fizzBuzz(7)).toBe('7');
   });
-})
+});
 
-describe("calculateAverage", () => {
+describe('calculateAverage', () => {
   it('should return NaN if given an empty array', () => {
     expect(calculateAverage([])).toBe(NaN);
   });
@@ -41,9 +41,9 @@ describe("calculateAverage", () => {
   it('should calculate the average of an array with 3 elements', () => {
     expect(calculateAverage([1, 2, 3])).toBe(2);
   });
-})
+});
 
-describe("factorial", () => {
+describe('factorial', () => {
   it('should return 1 if given a 0', () => {
     expect(factorial(0)).toBe(1);
   });
@@ -62,4 +62,4 @@ describe("factorial", () => {
   it('should return undefined if given a negative number', () => {
     expect(factorial(-1)).toBeUndefined();
   });
-})
+});

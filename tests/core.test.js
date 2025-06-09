@@ -1,5 +1,24 @@
-import { describe, it, expect, beforeEach, beforeAll, afterAll, afterEach } from "vitest";
-import { calculateDiscount, canDrive, createProduct, fetchData, getCoupons, isPriceInRange, isStrongPassword, isValidUsername, Stack, validateUserInput } from "../src/core";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from 'vitest';
+import {
+  calculateDiscount,
+  canDrive,
+  createProduct,
+  fetchData,
+  getCoupons,
+  isPriceInRange,
+  isStrongPassword,
+  isValidUsername,
+  Stack,
+  validateUserInput,
+} from '../src/core';
 
 describe('getCoupons', () => {
   it('should return an array of coupons', () => {
@@ -9,7 +28,7 @@ describe('getCoupons', () => {
   });
   it('should return an array with valid coupon codes', () => {
     const coupons = getCoupons();
-    coupons.forEach(coupon => {
+    coupons.forEach((coupon) => {
       expect(coupon).toHaveProperty('code');
       expect(typeof coupon.code).toBe('string');
       expect(coupon.code).toBeTruthy();
@@ -17,7 +36,7 @@ describe('getCoupons', () => {
   });
   it('should return an array with valid discounts', () => {
     const coupons = getCoupons();
-    coupons.forEach(coupon => {
+    coupons.forEach((coupon) => {
       expect(coupon).toHaveProperty('discount');
       expect(typeof coupon.discount).toBe('number');
       expect(coupon.discount).toBeGreaterThan(0);
@@ -75,14 +94,14 @@ describe('validateUserInput', () => {
 
 describe('isPriceInRange', () => {
   it.each([
-    { scenario: 'price < min', value: -10, result: false},
-    { scenario: 'price = min', value: 0, result: true},
-    { scenario: 'price within range', value: 50, result: true},
-    { scenario: 'price = max', value: 100, result: true},
-    { scenario: 'price > max', value: 200, result: false},
+    { scenario: 'price < min', value: -10, result: false },
+    { scenario: 'price = min', value: 0, result: true },
+    { scenario: 'price within range', value: 50, result: true },
+    { scenario: 'price = max', value: 100, result: true },
+    { scenario: 'price > max', value: 200, result: false },
   ])('should return $result when $scenario', ({ scenario, value, result }) => {
     expect(isPriceInRange(value, 0, 100)).toBe(result);
-  })
+  });
 });
 
 describe('isValidUsername', () => {
@@ -102,9 +121,9 @@ describe('isValidUsername', () => {
     expect(isValidUsername('a'.repeat(maxLength - 1))).toBe(true);
   });
   it('should return false for invalid input types', () => {
-    expect(isValidUsername(null)).toBe(false);    
-    expect(isValidUsername(undefined)).toBe(false);    
-    expect(isValidUsername(1)).toBe(false);    
+    expect(isValidUsername(null)).toBe(false);
+    expect(isValidUsername(undefined)).toBe(false);
+    expect(isValidUsername(1)).toBe(false);
   });
 });
 
@@ -113,54 +132,53 @@ describe('canDrive', () => {
     expect(canDrive(20, 'FR')).toMatch(/invalid/i);
   });
   it.each([
-    { age: 15, country: 'US', result: false},
-    { age: 16, country: 'US', result: true},
-    { age: 17, country: 'US', result: true},
-    { age: 16, country: 'UK', result: false},
-    { age: 17, country: 'UK', result: true},
-    { age: 18, country: 'UK', result: true},
-  ])('should return $result for ($age, $country)', ({ age, country, result }) => {
-    expect(canDrive(age, country)).toBe(result);
-  })
-})
+    { age: 15, country: 'US', result: false },
+    { age: 16, country: 'US', result: true },
+    { age: 17, country: 'US', result: true },
+    { age: 16, country: 'UK', result: false },
+    { age: 17, country: 'UK', result: true },
+    { age: 18, country: 'UK', result: true },
+  ])(
+    'should return $result for ($age, $country)',
+    ({ age, country, result }) => {
+      expect(canDrive(age, country)).toBe(result);
+    },
+  );
+});
 
 describe('fetchData', () => {
   it('should return a promise that will resolve to an array of numbers', async () => {
     try {
       const result = await fetchData();
-    } catch (error){
+    } catch (error) {
       expect(error).toHaveProperty('reason');
       expect(error.reason).toMatch(/fail/i);
     }
-  })
-})
+  });
+});
 
 describe('test suite', () => {
   beforeAll(() => {
-    console.log('beforeAll called')
-  })
+    console.log('beforeAll called');
+  });
   beforeEach(() => {
-    console.log('beforeEach called')
-  })
+    console.log('beforeEach called');
+  });
   afterEach(() => {
-    console.log('afterEach called')
-  })
+    console.log('afterEach called');
+  });
   afterAll(() => {
-    console.log('afterAll called')
-  })
-  it('test case 1', () => {
-    
-  })
-  it('test case 2', () => {
-    
-  })
-})
+    console.log('afterAll called');
+  });
+  it('test case 1', () => {});
+  it('test case 2', () => {});
+});
 
 describe('Stack', () => {
   let stack;
   beforeEach(() => {
     stack = new Stack();
-  })
+  });
   it('push should add an item to the stack', () => {
     stack.push(1);
     expect(stack.size()).toBe(1);
@@ -191,7 +209,7 @@ describe('Stack', () => {
   });
   it('isEmpty should return true if stack is empty', () => {
     expect(stack.isEmpty()).toBe(true);
-  })
+  });
   it('isEmpty should return false if stack is not empty', () => {
     stack.push(1);
     expect(stack.isEmpty()).toBe(false);
@@ -209,34 +227,49 @@ describe('Stack', () => {
     stack.clear();
 
     expect(stack.size()).toBe(0);
-  })
-})
+  });
+});
 
 describe('createProduct', () => {
   it('should return true if correct product was added', () => {
-    const product = { name: 'Test', price: 10};
+    const product = { name: 'Test', price: 10 };
     expect(createProduct(product).success).toBe(true);
   });
   it('should return false and throw an error if no product name was given', () => {
-    const product = {name: '', price: 10}
+    const product = { name: '', price: 10 };
     expect(createProduct(product).success).toBe(false);
     expect(createProduct(product).error.code).toMatch(/invalid/i);
-  })
+  });
   it('should return false and throw an error if incorrect price was given', () => {
-    const product = {name: 'Test', price: -50}
+    const product = { name: 'Test', price: -50 };
     expect(createProduct(product).success).toBe(false);
     expect(createProduct(product).error.code).toMatch(/invalid/i);
-  })
-})
+  });
+});
 
 describe('isStrongPassword', () => {
   it.each([
     { story: 'is valid', password: 'Password1', result: true },
     { story: 'is too short', password: 'abc', result: false },
-    { story: 'does not have uppercase letters', password: 'password', result: false },
-    { story: 'does not have lowercase letters', password: 'PASSWORD', result: false },
-    { story: 'does not have at least one digit', password: 'Password', result: false },
-  ])('should return $result if password $story', ({ story, password, result }) => {
-    expect(isStrongPassword(password)).toBe(result);
-  })
-})
+    {
+      story: 'does not have uppercase letters',
+      password: 'password',
+      result: false,
+    },
+    {
+      story: 'does not have lowercase letters',
+      password: 'PASSWORD',
+      result: false,
+    },
+    {
+      story: 'does not have at least one digit',
+      password: 'Password',
+      result: false,
+    },
+  ])(
+    'should return $result if password $story',
+    ({ story, password, result }) => {
+      expect(isStrongPassword(password)).toBe(result);
+    },
+  );
+});
