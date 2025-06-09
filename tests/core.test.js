@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { calculateDiscount, canDrive, getCoupons, isPriceInRange, isValidUsername, validateUserInput } from "../src/core";
+import { calculateDiscount, canDrive, fetchData, getCoupons, isPriceInRange, isValidUsername, validateUserInput } from "../src/core";
 
 describe('getCoupons', () => {
   it('should return an array of coupons', () => {
@@ -74,17 +74,15 @@ describe('validateUserInput', () => {
 });
 
 describe('isPriceInRange', () => {
-  it('should return false when the price is outside the range', () => {
-    expect(isPriceInRange(-10, 0, 100)).toBe(false);
-    expect(isPriceInRange(200, 0, 100)).toBe(false);
-  });
-  it('should return true when the price is equal to the min or max', () => {
-    expect(isPriceInRange(0, 0, 100)).toBe(true);
-    expect(isPriceInRange(100, 0, 100)).toBe(true);
-  });
-  it('should return true when the price is within the range', () => {
-    expect(isPriceInRange(50, 0, 100)).toBe(true);
-  });
+  it.each([
+    { scenario: 'price < min', value: -10, result: false},
+    { scenario: 'price = min', value: 0, result: true},
+    { scenario: 'price within range', value: 50, result: true},
+    { scenario: 'price = max', value: 100, result: true},
+    { scenario: 'price > max', value: 200, result: false},
+  ])('should return $result when $scenario', ({ scenario, value, result }) => {
+    expect(isPriceInRange(value, 0, 100)).toBe(result);
+  })
 });
 
 describe('isValidUsername', () => {
@@ -123,5 +121,16 @@ describe('canDrive', () => {
     { age: 18, country: 'UK', result: true},
   ])('should return $result for ($age, $country)', ({ age, country, result }) => {
     expect(canDrive(age, country)).toBe(result);
+  })
+})
+
+describe('fetchData', () => {
+  it('should return a promise that will resolve to an array of numbers', async () => {
+    try {
+      const result = await fetchData();
+    } catch (error){
+      expect(error).toHaveProperty('reason');
+      expect(error.reason).toMatch(/fail/i);
+    }
   })
 })
